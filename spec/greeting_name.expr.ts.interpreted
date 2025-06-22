@@ -1,2 +1,2 @@
-//--vars greeting=Hello --prompts name=World
-`Hello World`
+//--var 'greeting=Hello' --prompt 'name=World'
+"Hello World"

@@ -7,12 +7,18 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "tsc"
+    "test": "vitest run ./tests/spec.test.ts",
+    "check": "tsc"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "arg": "5.0.2",
     "typescript": "^5.8.3"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.3",
+    "glob": "^11.0.3",
+    "vitest": "^3.2.4"
   }
 }

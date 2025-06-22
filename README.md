@@ -54,7 +54,8 @@ npx tsx spec/greeting_name.expr.ts \
 
 ## Tests
 
-The [spec](./spec/) directory has several input `*.expr` with corrosponding `.ts` expected output.
+The [spec](./spec/) directory has several input `*.expr` with corrosponding `*.expr.ts` expected generated code.
 
-- `cargo test` Transpiles the `*.expr` files and checks the `*.ts` files for equality.
-- `npm run test` Typechecks the `*.ts` files
+- `cargo test` Transpiles the `*.expr` files and checks the `*.expr.ts` files for equality.
+- `npm run test` Runs the `*.expr.ts` files using `npx tsx` and compares results against `*.expr.ts.interpreted` files
+- `npm run check` Typechecks the `*.expr.ts` files

@@ -1,1 +1,2 @@
-undefined
+//--prompt a=foo
+"foo"
