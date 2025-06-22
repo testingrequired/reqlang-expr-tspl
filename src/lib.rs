@@ -8,7 +8,7 @@ pub fn transpile(source: &str) -> Result<String, String> {
             let body = transpile_expr(&ast);
 
             let template = format!(
-                "/// <reference path=\"../reqlang-expr.d.ts\" />\nexport const expression: Expression = (env: Env) => () => {{\n  return {body};\n}};\n"
+                "export const expression: Expression = (env: Env) => () => {{\n  return {body};\n}};\n"
             );
 
             Ok(template)
