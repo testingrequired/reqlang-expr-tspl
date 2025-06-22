@@ -11,11 +11,11 @@ pub fn transpile(source: &str) -> Result<String, String> {
                 "
             import * as ReqlangExpr from \"@reqlang-expr-tspl/runtime\";
 
-            const args = ReqlangExpr.getArgs();
-
             const expression: ReqlangExpr.Expression = (ctx) => {
               return %BODY%;
             };
+            
+            const args = ReqlangExpr.getArgs();
 
             const env = new ReqlangExpr.Env(
               args.vars,

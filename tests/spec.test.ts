@@ -19,9 +19,7 @@ test.each(tsFiles)("test %s", async (tsFile) => {
     ? [firstLine.slice(2), rest.join("\n")]
     : ["", interpretedContent];
 
-  const [stdout, stderr] = await asyncCallExecProcess(tsFile, args);
-
-  console.log(JSON.stringify({ stdout, stderr, interpretedContent }));
+  const [stdout] = await asyncCallExecProcess(tsFile, args);
 
   expect(stdout).toBe(interpretedContentCode);
 });

@@ -1,10 +1,10 @@
 import * as ReqlangExpr from "@reqlang-expr-tspl/runtime";
 
-const args = ReqlangExpr.getArgs();
-
 const expression: ReqlangExpr.Expression = (ctx) => {
   return ctx.builtins.concat("Hello", " ", "World");
 };
+
+const args = ReqlangExpr.getArgs();
 
 const env = new ReqlangExpr.Env(
   args.vars,
