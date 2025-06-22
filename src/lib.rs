@@ -8,7 +8,7 @@ pub fn transpile(source: &str) -> Result<String, String> {
             let body = transpile_expr(&ast);
 
             let template = format!(
-                "/// <reference path=\"../reqlang-expr.d.ts\" />\nexport const expression: Expression = () => {{\n  return {body};\n}};\n"
+                "/// <reference path=\"../reqlang-expr.d.ts\" />\nexport const expression: Expression = (env: Env) => () => {{\n  return {body};\n}};\n"
             );
 
             Ok(template)
@@ -25,7 +25,27 @@ fn transpile_expr(expr: &Expr) -> String {
             format!("{value}")
         }
         Expr::Identifier(expr_identifier) => {
-            format!("{}", expr_identifier.name())
+            let identifier = expr_identifier.name();
+            let identifier_prefix = &identifier[..1];
+            let identifier_suffix = &identifier[1..];
+
+            match identifier_prefix {
+                "?" => {
+                    format!("env.prompts.{}", identifier_suffix)
+                }
+                "!" => {
+                    format!("env.secrets.{}", identifier_suffix)
+                }
+                ":" => {
+                    format!("env.vars.{}", identifier_suffix)
+                }
+                "@" => {
+                    format!("env.client.{}", identifier_suffix)
+                }
+                _ => {
+                    format!("{}", expr_identifier.name())
+                }
+            }
         }
         Expr::Call(expr_call) => {
             let callee = expr_call.callee.0.identifier_name().unwrap();
