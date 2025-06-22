@@ -1,0 +1,13 @@
+[package]
+name = "reqlang-expr-tspl"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+reqlang-expr = "0.7.0"
+textwrap = "0.16.2"
+clap = { version = "4.4.16", features = ["derive"] }
+
+[dev-dependencies]
+rstest = "0.25.0"
+pretty_assertions = "1.4.1"
