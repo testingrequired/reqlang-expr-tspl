@@ -18,3 +18,10 @@ export const expression: Expression = (env: Env) => () => {
 ```
 
 See: [reqlang-expr.d.ts](./reqlang-expr.d.ts)
+
+## Tests
+
+The [spec](./spec/) directory has several input `*.expr` with corrosponding `.ts` expected output.
+
+- `cargo test` Transpiles the `*.expr` files and checks the `*.ts` files for equality.
+- `npm run test` Typechecks the `*.ts` files
