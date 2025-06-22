@@ -11,13 +11,35 @@ A toy transpiler to convert [reqlang-expr](https://github.com/testingrequired/re
 transpiles to
 
 ```typescript
-/// <reference path="../reqlang-expr.d.ts" />
-export const expression: Expression = (env: Env) => () => {
-  return id("foo");
+import * as ReqlangExpr from "@reqlang-expr-tspl/runtime";
+
+const expression: ReqlangExpr.Expression = (ctx) => {
+  return ctx.builtins.id("foo");
 };
+
+const env = ReqlangExpr.Env.new();
+
+const context = {
+  env,
+  builtins: ReqlangExpr.builtinFns,
+};
+
+const value = expression(context);
+
+console.log(JSON.stringify(value));
 ```
 
-See: [reqlang-expr.d.ts](./reqlang-expr.d.ts)
+See: [@reqlang-expr-tspl/runtime](./src/index.ts)
+
+## Running Transpiled Files
+
+The transpiled typescript code can be ran using `npm tsx`
+
+```bash
+npx tsx spec/bool_true.expr.ts
+
+# true
+```
 
 ## Tests
 

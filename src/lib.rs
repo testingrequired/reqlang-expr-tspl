@@ -7,11 +7,30 @@ pub fn transpile(source: &str) -> Result<String, String> {
         Ok(ast) => {
             let body = transpile_expr(&ast);
 
-            let template = format!(
-                "export const expression: Expression = (env: Env) => () => {{\n  return {body};\n}};\n"
+            let template = textwrap::dedent(
+                "
+            import * as ReqlangExpr from \"@reqlang-expr-tspl/runtime\";
+
+            const expression: ReqlangExpr.Expression = (ctx) => {
+              return %BODY%;
+            };
+
+            const env = ReqlangExpr.Env.new();
+
+            const context = {
+              env,
+              builtins: ReqlangExpr.builtinFns,
+            };
+
+            const value = expression(context);
+
+            console.log(JSON.stringify(value));
+            ",
             );
 
-            Ok(template)
+            let transpiled_code = template.trim_start().replace("%BODY%", &body);
+
+            Ok(transpiled_code)
         }
         Err(err) => Err(format!("{err:#?}")),
     }
@@ -31,16 +50,16 @@ fn transpile_expr(expr: &Expr) -> String {
 
             match identifier_prefix {
                 "?" => {
-                    format!("env.prompts.{}", identifier_suffix)
+                    format!("ctx.env.getPrompt(\"{}\")", identifier_suffix)
                 }
                 "!" => {
-                    format!("env.secrets.{}", identifier_suffix)
+                    format!("ctx.env.getSecret(\"{}\")", identifier_suffix)
                 }
                 ":" => {
-                    format!("env.vars.{}", identifier_suffix)
+                    format!("ctx.env.getVar(\"{}\")", identifier_suffix)
                 }
                 "@" => {
-                    format!("env.client.{}", identifier_suffix)
+                    format!("ctx.env.getClient(\"{}\")", identifier_suffix)
                 }
                 _ => {
                     format!("{}", expr_identifier.name())
@@ -55,7 +74,7 @@ fn transpile_expr(expr: &Expr) -> String {
                 .map(|expr| transpile_expr(&expr.0))
                 .collect();
 
-            format!("{callee}({})", args.join(", "))
+            format!("ctx.builtins.{callee}({})", args.join(", "))
         }
         Expr::String(expr_string) => {
             format!("\"{}\"", expr_string.0)
