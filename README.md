@@ -45,9 +45,11 @@ See: [@reqlang-expr-tspl/runtime](./src/index.ts)
 The transpiled typescript code can be ran using `npm tsx`
 
 ```bash
-npx tsx spec/bool_true.expr.ts
+npx tsx spec/greeting_name.expr.ts \
+  --var 'greeting=Hello' \
+  --prompt 'name=World'
 
-# true
+# "Hello World"
 ```
 
 ## Tests
