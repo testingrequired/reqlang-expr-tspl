@@ -1,3 +1,6 @@
+import arg from "arg";
+import type { Spec } from "arg";
+
 export type ExprValue = string | boolean;
 
 export type Expression = (context: RuntimeContext) => ExprValue;
@@ -70,3 +73,54 @@ export class Env {
     this.client[key] = value;
   }
 }
+
+export const getArgs: () => Args = () => {
+  const cliArgs = arg({
+    "--var": [String],
+    "--prompt": [String],
+    "--secret": [String],
+    "--client": [String],
+  });
+
+  const vars =
+    cliArgs["--var"]?.reduce((acc, val) => {
+      const [key, value] = val.split("=");
+      acc[key] = value;
+      return acc;
+    }, {} as Record<string, string>) ?? {};
+
+  const prompts =
+    cliArgs["--prompt"]?.reduce((acc, val) => {
+      const [key, value] = val.split("=");
+      acc[key] = value;
+      return acc;
+    }, {} as Record<string, string>) ?? {};
+
+  const secrets =
+    cliArgs["--secret"]?.reduce((acc, val) => {
+      const [key, value] = val.split("=");
+      acc[key] = value;
+      return acc;
+    }, {} as Record<string, string>) ?? {};
+
+  const client =
+    cliArgs["--client"]?.reduce((acc, val) => {
+      const [key, value] = val.split("=");
+      acc[key] = value;
+      return acc;
+    }, {} as Record<string, string>) ?? {};
+
+  return {
+    vars,
+    prompts,
+    secrets,
+    client,
+  };
+};
+
+export type Args = {
+  vars: Record<string, string>;
+  prompts: Record<string, string>;
+  secrets: Record<string, string>;
+  client: Record<string, string>;
+};

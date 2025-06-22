@@ -1,10 +1,17 @@
 import * as ReqlangExpr from "@reqlang-expr-tspl/runtime";
 
+const args = ReqlangExpr.getArgs();
+
 const expression: ReqlangExpr.Expression = (ctx) => {
   return ctx.builtins.id("foo");
 };
 
-const env = ReqlangExpr.Env.new();
+const env = new ReqlangExpr.Env(
+  args.vars,
+  args.prompts,
+  args.secrets,
+  args.client
+);
 
 const context = {
   env,
