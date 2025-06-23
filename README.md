@@ -43,9 +43,9 @@ See: [@reqlang-expr-tspl/runtime](./src/index.ts)
 
 ## Running Transpiled Files
 
-The transpiled typescript code can be ran using `npm tsx`
-
 ```bash
+reqlang-expr-tspl spec/greeting_name.expr > spec/greeting_name.expr.ts
+
 npx tsx spec/greeting_name.expr.ts \
   --var 'greeting=Hello' \
   --prompt 'name=World'
@@ -58,6 +58,20 @@ npx tsx spec/greeting_name.expr.ts \
 - [Rust](https://www.rust-lang.org/)
 - [Node](https://nodejs.org/)
 - [just](https://just.systems/)
+
+## Running CLI
+
+The `reqlang-expr-tspl.sh` script helps run the latest development version of the CLI.
+
+```bash
+./reqlang-expr-tspl.sh spec/greeting_name.expr > spec/greeting_name.expr.ts
+
+npx tsx spec/greeting_name.expr.ts \
+  --var 'greeting=Hello' \
+  --prompt 'name=World'
+
+# "Hello World"
+```
 
 ### Tests
 
