@@ -29,7 +29,7 @@ function asyncCallExecProcess(
   args: string
 ): Promise<[string, string]> {
   return new Promise((resolve, reject) => {
-    exec(`npx tsx ${tsFile} ${args}`, (err, stdout, stderr) => {
+    exec(`./node_modules/.bin/tsx ${tsFile} ${args}`, (err, stdout, stderr) => {
       if (err) {
         reject(err);
       }
