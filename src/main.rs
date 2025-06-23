@@ -30,10 +30,15 @@ fn main() {
             let transpiled_code = transpiled_code
                 .replace(
                     "import * as ReqlangExpr from \"@reqlang-expr-tspl/runtime\";",
-                    &JSRUNTIME_SOURCE,
+                    &JSRUNTIME_SOURCE.replace("export ", ""),
                 )
                 .replace(&REQLANG_OBJ_PREFIX, "")
-                .replace("import arg from \"arg\";", ARG_SOURCE);
+                .replace(
+                    "import arg from \"arg\";",
+                    &ARG_SOURCE
+                        .replace("module.exports = arg;", "")
+                        .replace("export ", ""),
+                );
 
             println!(
                 "// @ts-nocheck\n/*\n{ARG_LICENSE}\n*/\n/*\n{LICENSE}\n*/\n{}",
