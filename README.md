@@ -60,6 +60,8 @@ npx tsx spec/greeting_name.expr.ts \
 
 ### Tests
 
+[![Verify](https://github.com/testingrequired/reqlang-expr-tspl/actions/workflows/verify.yml/badge.svg)](https://github.com/testingrequired/reqlang-expr-tspl/actions/workflows/verify.yml)
+
 The [spec](./spec/) directory has several input `*.expr` with corrosponding `*.expr.ts` expected generated code.
 
 - `cargo test` Transpiles the `*.expr` files and checks the `*.expr.ts` files for equality.
