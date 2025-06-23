@@ -74,37 +74,45 @@ fn transpile_expr(expr: &Expr) -> String {
             }
         }
         Expr::Call(expr_call) => {
-            let callee = expr_call.callee.0.identifier_name().unwrap();
+            let callee = expr_call
+                .callee
+                .0
+                .identifier_name()
+                .expect("callee is not an identifier");
 
-            if callee == "eq" {
-                let args: Vec<String> = expr_call
-                    .args
-                    .iter()
-                    .map(|expr| transpile_expr(&expr.0))
-                    .collect();
+            match callee {
+                "eq" => {
+                    let args: Vec<String> = expr_call
+                        .args
+                        .iter()
+                        .map(|(expr, _)| transpile_expr(&expr))
+                        .collect();
 
-                let arg1 = args.first().unwrap();
-                let arg2 = args.get(1).unwrap();
+                    let arg1 = args.first().unwrap();
+                    let arg2 = args.get(1).unwrap();
 
-                format!("({arg1} as ReqlangExpr.ExprValue === {arg2} as ReqlangExpr.ExprValue)")
-            } else if callee == "not" {
-                let args: Vec<String> = expr_call
-                    .args
-                    .iter()
-                    .map(|expr| transpile_expr(&expr.0))
-                    .collect();
+                    format!("({arg1} as ReqlangExpr.ExprValue === {arg2} as ReqlangExpr.ExprValue)")
+                }
+                "not" => {
+                    let args: Vec<String> = expr_call
+                        .args
+                        .iter()
+                        .map(|(expr, _)| transpile_expr(&expr))
+                        .collect();
 
-                let arg1 = args.first().unwrap();
+                    let arg1 = args.first().unwrap();
 
-                format!("!{arg1}")
-            } else {
-                let args: Vec<String> = expr_call
-                    .args
-                    .iter()
-                    .map(|expr| transpile_expr(&expr.0))
-                    .collect();
+                    format!("!{arg1}")
+                }
+                _ => {
+                    let args: Vec<String> = expr_call
+                        .args
+                        .iter()
+                        .map(|(expr, _)| transpile_expr(&expr))
+                        .collect();
 
-                format!("ctx.builtins.{callee}({})", args.join(", "))
+                    format!("ctx.builtins.{callee}({})", args.join(", "))
+                }
             }
         }
         Expr::String(expr_string) => {
