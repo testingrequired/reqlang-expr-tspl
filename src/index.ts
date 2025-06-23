@@ -1,7 +1,7 @@
 import arg from "arg";
 import type { Spec } from "arg";
 
-export type ExprValue = string | boolean;
+export type ExprValue = string | boolean | ((value: ExprValue) => ExprValue);
 
 export type Expression = (context: RuntimeContext) => ExprValue;
 

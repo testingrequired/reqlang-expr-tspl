@@ -12,7 +12,7 @@ fn spec_files_interpreted(#[files("spec/*.expr")] path: PathBuf) -> Result<(), B
 
         let result = transpile(&expr_source)?;
 
-        assert_eq!(ts, result);
+        pretty_assertions::assert_eq!(ts, result);
     } else {
         panic!("No ts file found for the expression file");
     }

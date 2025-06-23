@@ -69,19 +69,33 @@ fn transpile_expr(expr: &Expr) -> String {
                     format!("ctx.env.getClient(\"{}\")", identifier_suffix)
                 }
                 _ => {
-                    format!("{}", expr_identifier.name())
+                    format!("ctx.builtins.{}", expr_identifier.name())
                 }
             }
         }
         Expr::Call(expr_call) => {
             let callee = expr_call.callee.0.identifier_name().unwrap();
-            let args: Vec<String> = expr_call
-                .args
-                .iter()
-                .map(|expr| transpile_expr(&expr.0))
-                .collect();
 
-            format!("ctx.builtins.{callee}({})", args.join(", "))
+            if callee == "eq" {
+                let args: Vec<String> = expr_call
+                    .args
+                    .iter()
+                    .map(|expr| transpile_expr(&expr.0))
+                    .collect();
+
+                let arg1 = args.first().unwrap();
+                let arg2 = args.get(1).unwrap();
+
+                format!("({arg1} as ReqlangExpr.ExprValue === {arg2} as ReqlangExpr.ExprValue)")
+            } else {
+                let args: Vec<String> = expr_call
+                    .args
+                    .iter()
+                    .map(|expr| transpile_expr(&expr.0))
+                    .collect();
+
+                format!("ctx.builtins.{callee}({})", args.join(", "))
+            }
         }
         Expr::String(expr_string) => {
             format!("\"{}\"", expr_string.0)
