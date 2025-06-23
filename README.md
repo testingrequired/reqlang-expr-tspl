@@ -52,10 +52,17 @@ npx tsx spec/greeting_name.expr.ts \
 # "Hello World"
 ```
 
-## Tests
+## Development
+
+- [Rust](https://www.rust-lang.org/)
+- [Node](https://nodejs.org/)
+- [just](https://just.systems/)
+
+### Tests
 
 The [spec](./spec/) directory has several input `*.expr` with corrosponding `*.expr.ts` expected generated code.
 
 - `cargo test` Transpiles the `*.expr` files and checks the `*.expr.ts` files for equality.
 - `npm run test` Runs the `*.expr.ts` files using `npx tsx` and compares results against `*.expr.ts.interpreted` files
 - `npm run check` Typechecks the `*.expr.ts` files
+- `just test` Runs all tests
