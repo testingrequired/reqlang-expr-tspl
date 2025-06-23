@@ -5,7 +5,7 @@ import { readFile } from "fs/promises";
 
 const tsFiles = globSync("./spec/*.expr.ts");
 
-test.each(tsFiles)("test %s", async (tsFile) => {
+test.concurrent.each(tsFiles)("test %s", async (tsFile) => {
   const interpretedFile = `${tsFile}.interpreted`;
 
   const interpretedContent = await readFile(interpretedFile, {
