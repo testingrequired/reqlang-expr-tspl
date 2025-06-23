@@ -87,6 +87,16 @@ fn transpile_expr(expr: &Expr) -> String {
                 let arg2 = args.get(1).unwrap();
 
                 format!("({arg1} as ReqlangExpr.ExprValue === {arg2} as ReqlangExpr.ExprValue)")
+            } else if callee == "not" {
+                let args: Vec<String> = expr_call
+                    .args
+                    .iter()
+                    .map(|expr| transpile_expr(&expr.0))
+                    .collect();
+
+                let arg1 = args.first().unwrap();
+
+                format!("!{arg1}")
             } else {
                 let args: Vec<String> = expr_call
                     .args
