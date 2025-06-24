@@ -5,8 +5,6 @@ edition = "2024"
 
 [dependencies]
 reqlang-expr = "0.7.0"
-textwrap = "0.16.2"
-clap = { version = "4.4.16", features = ["derive"] }
 
 [dev-dependencies]
 rstest = "0.25.0"
