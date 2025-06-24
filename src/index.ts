@@ -1,4 +1,50 @@
-import arg from "arg";
+type ArgsMap = {
+  vars: Record<string, string>;
+  prompts: Record<string, string>;
+  secrets: Record<string, string>;
+  clients: Record<string, string>;
+};
+
+function parseArgs(args: string): ArgsMap {
+  const argMap: ArgsMap = {
+    vars: {},
+    prompts: {},
+    secrets: {},
+    clients: {},
+  };
+
+  const parts = args.split(/\s+/);
+  let i = 0;
+
+  while (i < parts.length) {
+    const currentPart = parts[i];
+
+    if (i + 1 < parts.length && parts[i + 1].includes("=")) {
+      const [key, value] = parts[i + 1].split("=");
+
+      switch (currentPart) {
+        case "--var":
+          argMap.vars[key] = value;
+          break;
+        case "--prompt":
+          argMap.prompts[key] = value;
+          break;
+        case "--secret":
+          argMap.secrets[key] = value;
+          break;
+        case "--client":
+          argMap.clients[key] = value;
+          break;
+        default:
+          break;
+      }
+      i++; // Skip the next part since it's processed here
+    }
+    i++;
+  }
+
+  return argMap;
+}
 
 export type ExprValue = string | boolean | ((value: ExprValue) => ExprValue);
 
@@ -74,46 +120,14 @@ export class Env {
 }
 
 export const getArgs: () => Args = () => {
-  const cliArgs = arg({
-    "--var": [String],
-    "--prompt": [String],
-    "--secret": [String],
-    "--client": [String],
-  });
-
-  const vars =
-    cliArgs["--var"]?.reduce((acc, val) => {
-      const [key, value] = val.split("=");
-      acc[key] = value;
-      return acc;
-    }, {} as Record<string, string>) ?? {};
-
-  const prompts =
-    cliArgs["--prompt"]?.reduce((acc, val) => {
-      const [key, value] = val.split("=");
-      acc[key] = value;
-      return acc;
-    }, {} as Record<string, string>) ?? {};
-
-  const secrets =
-    cliArgs["--secret"]?.reduce((acc, val) => {
-      const [key, value] = val.split("=");
-      acc[key] = value;
-      return acc;
-    }, {} as Record<string, string>) ?? {};
-
-  const client =
-    cliArgs["--client"]?.reduce((acc, val) => {
-      const [key, value] = val.split("=");
-      acc[key] = value;
-      return acc;
-    }, {} as Record<string, string>) ?? {};
+  let args_string = (process as any).argv.splice(2).join(" ");
+  const args = parseArgs(args_string);
 
   return {
-    vars,
-    prompts,
-    secrets,
-    client,
+    vars: args.vars,
+    prompts: args.prompts,
+    secrets: args.secrets,
+    client: args.clients,
   };
 };
 
@@ -123,3 +137,5 @@ export type Args = {
   secrets: Record<string, string>;
   client: Record<string, string>;
 };
+
+declare const process: any;

@@ -9,11 +9,6 @@ const JSRUNTIME_IMPORT: &'static str =
     "import * as ReqlangExpr from \"@reqlang-expr-tspl/runtime\";";
 const REQLANGEXPR_LICENSE: &'static str = include_str!("../LICENSE");
 const REQLANGEXPR_OBJ_PREFIX: &'static str = "ReqlangExpr.";
-const ARGLIB_IMPORT: &'static str = "import arg from \"arg\";";
-const ARGLIB_EXPORT: &'static str = "module.exports = arg;";
-const ARGLIB_SOURCE: &'static str = include_str!("../node_modules/arg/index.js");
-const ARGLIB_LICENSE: &'static str = include_str!("../node_modules/arg/LICENSE.md");
-const TS_NOCHECK: &'static str = "// @ts-nocheck\n";
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -30,17 +25,15 @@ fn main() {
 
     let source = fs::read_to_string(file_path).expect("Unexpected error reading the file.");
     let jsruntime_source = JSRUNTIME_SOURCE.replace("export ", "");
-    let arglib_source = ARGLIB_SOURCE.replace(ARGLIB_EXPORT, "");
-    let licenses = format!("/*\n{ARGLIB_LICENSE}\n*/\n/*\n{REQLANGEXPR_LICENSE}\n*/\n");
+    let licenses = format!("/*\n{REQLANGEXPR_LICENSE}\n*/\n");
 
     match transpile(&source) {
         Ok(transpiled_code) => {
             let transpiled_code = transpiled_code
                 .replace(JSRUNTIME_IMPORT, &jsruntime_source)
-                .replace(REQLANGEXPR_OBJ_PREFIX, "")
-                .replace(ARGLIB_IMPORT, &arglib_source);
+                .replace(REQLANGEXPR_OBJ_PREFIX, "");
 
-            println!("{TS_NOCHECK}{licenses}{transpiled_code}")
+            println!("{licenses}{transpiled_code}")
         }
         Err(err) => eprintln!("Error transpiling: {}", err),
     }
