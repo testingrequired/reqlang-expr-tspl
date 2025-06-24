@@ -117,7 +117,7 @@ fn transpile_expr(expr: &Expr) -> String {
             }
         }
         Expr::String(expr_string) => {
-            format!("\"{}\"", expr_string.0)
+            format!("\"{}\"", expr_string.0.replace("\"", r#"\""#))
         }
         Expr::Error => todo!(),
     }
